@@ -2,6 +2,44 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/modules/display.js":
+/*!********************************!*\
+  !*** ./src/modules/display.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var listContainer = document.querySelector('.todolist');
+var tasks = [{
+  index: 0,
+  description: 'one',
+  completed: false
+}, {
+  index: 1,
+  description: 'jump outta space',
+  completed: false
+}, {
+  index: 2,
+  description: 'watch fast x',
+  completed: false
+}, {
+  index: 3,
+  description: 'get some sleep',
+  completed: false
+}];
+var displayTask = function displayTask(tasks) {
+  var displaytTaskDem = tasks.map(function (item) {
+    return "\n  <div class=\"list\" draggable=\"true\">\n    <div class=\"content\">\n        <input class=\"box\" type=\"checkbox\" name=\"\" id=\"\">\n        <input type=\"text\" name=\"\" id=\"\" value=\"".concat(item.description, "\">\n    </div>\n    <i class=\"fa-solid fa-ellipsis-vertical icon\"></i>\n</div>");
+  }).join('');
+  listContainer.innerHTML = displaytTaskDem;
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (displayTask(tasks));
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/styles/main.scss":
 /*!***********************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/styles/main.scss ***!
@@ -20,10 +58,92 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+___CSS_LOADER_EXPORT___.push([module.id, "@import url(https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;0,500;1,400&display=swap);"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `body {
-  text-align: center;
-}`, "",{"version":3,"sources":["webpack://./src/styles/main.scss"],"names":[],"mappings":"AAAA;EACE,kBAAA;AACF","sourcesContent":["body {\r\n  text-align: center;\r\n}\r\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `*,
+::after,
+::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+h1 {
+  text-transform: capitalize;
+}
+
+main {
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+.container {
+  width: 21rem;
+  max-height: 100vh;
+  box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.icon {
+  margin-top: 0.7rem;
+}
+
+.add {
+  display: flex;
+  justify-content: space-between;
+  color: gray;
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
+}
+
+input[type=text] {
+  padding: 10px;
+  font-size: 18px;
+  outline: 0;
+  border: 0;
+  min-width: 291px;
+}
+
+::placeholder {
+  color: gray;
+}
+
+.list {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid gray;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+}
+
+input[type=checkbox] {
+  width: 15px;
+}
+
+.content input[type=text] {
+  min-width: 279px;
+}
+
+.list .icon {
+  color: gray;
+}`, "",{"version":3,"sources":["webpack://./src/styles/main.scss"],"names":[],"mappings":"AAEA;;;EAGE,SAAA;EACA,UAAA;EACA,sBAAA;EACA,uBAAA;AAAF;;AAGA;EACE,kCAAA;AAAF;;AAGA;EACE,0BAAA;AAAF;;AAGA;EACE,aAAA;EACA,mBAAA;EACA,aAAA;AAAF;;AAGA;EACE,YAAA;EACA,iBAAA;EACA,iDAAA;EACA,aAAA;EACA,aAAA;EACA,sBAAA;EACA,SAAA;AAAF;;AAGA;EACE,aAAA;EACA,8BAAA;AAAF;;AAGA;EACC,kBAAA;AAAD;;AAGA;EACE,aAAA;EACA,8BAAA;EACA,WAAA;EACA,0BAAA;EACA,6BAAA;AAAF;;AAGA;EACI,aAAA;EACA,eAAA;EACA,UAAA;EACA,SAAA;EACA,gBAAA;AAAJ;;AAEA;EACE,WAAA;AACF;;AAEA;EACE,aAAA;EACA,8BAAA;EACA,6BAAA;AACF;;AAEA;EACE,aAAA;EACA,8BAAA;AACF;;AAEA;EACE,WAAA;AACF;;AAEA;EACE,gBAAA;AACF;;AAEA;EACE,WAAA;AACF","sourcesContent":["@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;0,500;1,400&display=swap');\r\n\r\n*,\r\n::after,\r\n::before {\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n  scroll-behavior: smooth;\r\n}\r\n\r\nbody {\r\n  font-family: 'Poppins', sans-serif;\r\n}\r\n\r\nh1 {\r\n  text-transform: capitalize;\r\n}\r\n\r\nmain {\r\n  display: grid;\r\n  place-items: center;\r\n  padding: 2rem;\r\n}\r\n\r\n.container {\r\n  width: 21rem;\r\n  max-height: 100vh;\r\n  box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;\r\n  padding: 15px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 20px;\r\n}\r\n\r\n.title{\r\n  display: flex;\r\n  justify-content: space-between;\r\n}\r\n\r\n.icon {\r\n margin-top: 0.7rem;\r\n}\r\n\r\n.add {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  color: gray;\r\n  border-top: 1px solid gray;\r\n  border-bottom: 1px solid gray;\r\n}\r\n\r\ninput[type=\"text\"] {\r\n    padding: 10px;\r\n    font-size: 18px;\r\n    outline: 0;\r\n    border: 0;\r\n    min-width: 291px;\r\n}\r\n::placeholder {\r\n  color: gray;\r\n}\r\n\r\n.list {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  border-bottom: 1px solid gray;\r\n}\r\n\r\n.content {\r\n  display: flex;\r\n  justify-content: space-between;\r\n}\r\n\r\ninput[type=\"checkbox\"]{\r\n  width: 15px;\r\n}\r\n\r\n.content input[type=\"text\"]{\r\n  min-width: 279px;\r\n}\r\n\r\n.list .icon {\r\n  color: gray;\r\n\r\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -551,9 +671,12 @@ var __webpack_exports__ = {};
   \**********************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _styles_main_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./styles/main.scss */ "./src/styles/main.scss");
+/* harmony import */ var _modules_display_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/display.js */ "./src/modules/display.js");
 
+
+window.addEventListener('DOMContentLoaded', _modules_display_js__WEBPACK_IMPORTED_MODULE_1__["default"]);
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=bundle2a8a6d06d0b422916f6d.js.map
+//# sourceMappingURL=bundle0f2e9845d62365fc7eaa.js.map
