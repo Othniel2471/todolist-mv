@@ -1,5 +1,5 @@
 function randomText() {
-    return 'random';
+  return 'random';
 }
 
-export default randomText
+export default randomText;
