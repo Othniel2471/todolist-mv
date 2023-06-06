@@ -33,13 +33,13 @@ main {
   gap: 20px;
 }
 
-.title{
+.title {
   display: flex;
   justify-content: space-between;
 }
 
 .icon {
- margin-top: 0.7rem;
+  margin-top: 0.7rem;
 }
 
 .add {
@@ -51,12 +51,13 @@ main {
 }
 
 input[type="text"] {
-    padding: 10px;
-    font-size: 18px;
-    outline: 0;
-    border: 0;
-    min-width: 291px;
+  padding: 10px;
+  font-size: 18px;
+  outline: 0;
+  border: 0;
+  min-width: 291px;
 }
+
 ::placeholder {
   color: gray;
 }
@@ -72,15 +73,14 @@ input[type="text"] {
   justify-content: space-between;
 }
 
-input[type="checkbox"]{
+input[type="checkbox"] {
   width: 15px;
 }
 
-.content input[type="text"]{
+.content input[type="text"] {
   min-width: 279px;
 }
 
 .list .icon {
   color: gray;
-
 }
