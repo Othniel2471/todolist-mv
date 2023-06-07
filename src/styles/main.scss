@@ -84,3 +84,14 @@ input[type="checkbox"] {
 .list .icon {
   color: gray;
 }
+
+.clear {
+  display: grid;
+  place-items: center;
+  color: red;
+}
+
+.clear:hover {
+  color: black;
+  cursor: pointer;
+}
