@@ -1,4 +1,4 @@
 import './styles/main.scss';
-import displayTask from './modules/display.js';
+import Todo from './modules/display.js';
 
-window.addEventListener('DOMContentLoaded', displayTask);
+Todo.initialize();
