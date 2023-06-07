@@ -10,106 +10,33 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   InputField: () => (/* binding */ InputField),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-var InputField = document.querySelector('.addtodo');
-var Todo = /*#__PURE__*/_createClass(function Todo(_index, _completed, _description) {
-  var _this = this;
-  _classCallCheck(this, Todo);
-  _defineProperty(this, "addItem", function () {
-    var index = Todo.index;
-    index = Todo.i;
-    var completed = Todo.completed;
-    var description = Todo.inputField.value;
-    var listItems = new Todo(index, completed, description);
-    if (localStorage.getItem('todoLists')) {
-      Todo.todoLists = JSON.parse(localStorage.getItem('todoLists'));
-    }
-    Todo.todoLists.push(listItems);
-    localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
-  });
-  _defineProperty(this, "clearField", function () {
-    Todo.inputField.value = '';
-  });
-  _defineProperty(this, "displayList", function (todo) {
-    // const todos = JSON.parse(localStorage.getItem('todoLists'));
-    var listContainer = document.querySelector('.todolist');
-    var displayTodos = todo.map(function (list) {
-      var index = list.index,
-        completed = list.completed,
-        description = list.description;
-      return "<div class=\"list\" data-id=\"".concat(index, "\">\n      <div class=\"content\">\n          <input class=\"box check-btn\" type=\"checkbox\" name=\"\" data-check=\"").concat(completed, "\">\n          <input class=\"edit-btn\" type=\"text\" name=\"\" id=\"\" value=\"").concat(description, "\">\n      </div>\n      <i class=\"fa-solid fa-ellipsis-vertical icon delete-btn\"></i>\n   </div>");
-    }).join('');
-    listContainer.innerHTML = displayTodos;
-
-    // select elements
-    var elements = document.querySelectorAll('.list');
-    elements.forEach(function (element) {
-      var deleteBtn = element.querySelector('.delete-btn');
-      deleteBtn.addEventListener('click', _this.deleteItem);
-    });
-  });
-  _defineProperty(this, "deleteItem", function (e) {
-    var element = e.target.closest('.list');
-    var index = Array.from(Todo.listContainer.children).indexOf(element);
-    Todo.todoLists.splice(index, 1);
-
-    // Update the index property of the remaining list objects
-    Todo.todoLists.forEach(function (list, i) {
-      list.index = i;
-    });
-    _this.displayList(Todo.todoLists); // Update the displayed list after deleting
-
-    // Update local storage
-    localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
-  });
-  _defineProperty(this, "displayItem", function () {
-    _this.addItem();
-    var updatedList = localStorage.getItem('todoLists');
-    var fullList = JSON.parse(updatedList);
-    _this.displayList(fullList);
-    _this.clearField();
-  });
-  _defineProperty(this, "showItem", function () {
-    var InputField = document.querySelector('.addtodo');
-    InputField.addEventListener('keypress', function (event) {
-      if (event.key === 'Enter') {
-        _this.displayItem();
-        Todo.i += 1;
-      }
-    });
-  });
-  this.index = _index;
-  this.complete = _completed;
-  this.description = _description;
-});
-_defineProperty(Todo, "todoLists", []);
-_defineProperty(Todo, "inputField", void 0);
-_defineProperty(Todo, "index", void 0);
-_defineProperty(Todo, "completed", void 0);
-_defineProperty(Todo, "listContainer", void 0);
-_defineProperty(Todo, "i", 0);
-_defineProperty(Todo, "initialize", function () {
-  Todo.inputField = document.querySelector('.addtodo');
-  Todo.listContainer = document.querySelector('.todolist');
-  var inv = new Todo();
-  inv.showItem();
-  window.addEventListener('DOMContentLoaded', function () {
-    if (localStorage.getItem('todoLists')) {
-      var fullList = JSON.parse(localStorage.getItem('todoLists'));
-      inv.displayList(fullList);
-    }
-  });
-});
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Todo);
+var listContainer = document.querySelector('.todolist');
+var tasks = [{
+  index: 0,
+  description: 'one',
+  completed: false
+}, {
+  index: 1,
+  description: 'jump outta space',
+  completed: false
+}, {
+  index: 2,
+  description: 'watch fast x',
+  completed: false
+}, {
+  index: 3,
+  description: 'get some sleep',
+  completed: false
+}];
+var displayTask = function displayTask(tasks) {
+  var displaytTaskDem = tasks.map(function (item) {
+    return "\n  <div class=\"list\" draggable=\"true\">\n    <div class=\"content\">\n        <input class=\"box\" type=\"checkbox\" name=\"\" id=\"\">\n        <input type=\"text\" name=\"\" id=\"\" value=\"".concat(item.description, "\">\n    </div>\n    <i class=\"fa-solid fa-ellipsis-vertical icon\"></i>\n</div>");
+  }).join('');
+  listContainer.innerHTML = displaytTaskDem;
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (displayTask(tasks));
 
 /***/ }),
 
@@ -758,9 +685,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_display_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/display.js */ "./src/modules/display.js");
 
 
-_modules_display_js__WEBPACK_IMPORTED_MODULE_1__["default"].initialize();
+window.addEventListener('DOMContentLoaded', _modules_display_js__WEBPACK_IMPORTED_MODULE_1__["default"]);
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=bundlecdaa303027612b4c1786.js.map
+//# sourceMappingURL=bundlea66c012baff4b98b0b9b.js.map
