@@ -1,5 +1,4 @@
-import randomText from './random';
-import './styles/main.scss'
+import './styles/main.scss';
+import displayTask from './modules/display.js';
 
-console.log(randomText());
-console.log(1);
+window.addEventListener('DOMContentLoaded', displayTask);
