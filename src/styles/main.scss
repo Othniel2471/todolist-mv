@@ -77,8 +77,12 @@ input[type="checkbox"] {
   width: 15px;
 }
 
-.content input[type="text"] {
+.content .check{
   min-width: 279px;
+}
+
+.checkActive {
+  text-decoration: line-through red;
 }
 
 .list .icon {
