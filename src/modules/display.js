@@ -1,3 +1,5 @@
+import checkItem from './taskStatus.js';
+
 export const InputField = document.querySelector('.addtodo');
 
 class Todo {
@@ -61,7 +63,8 @@ class Todo {
           <input class="edit-btn" type="text" name="" id="" value="${description}" readonly>
       </div>
       <i class="fa-solid fa-trash icon delete-btn"></i>
-   </div>`;
+   </div>
+   `;
     }).join('');
 
     listContainer.innerHTML = displayTodos;
@@ -73,6 +76,10 @@ class Todo {
       deleteBtn.addEventListener('click', this.deleteItem);
       const editBtn = element.querySelector('.edit-btn');
       editBtn.addEventListener('click', this.editItem);
+      const checkBtn = element.querySelector('.check-btn');
+      checkBtn.addEventListener('change', (e) => {
+        checkItem(e, Todo);
+      });
     });
   }
 
