@@ -2,6 +2,37 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/modules/clearCompleted.js":
+/*!***************************************!*\
+  !*** ./src/modules/clearCompleted.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function removeCheckedItems(Todo) {
+  // Filter out the checked items
+  var uncheckedItems = Todo.todoLists.filter(function (item) {
+    return !item.completed;
+  });
+
+  // Update the index property of the remaining list objects
+  uncheckedItems.forEach(function (item, index) {
+    item.index = index;
+  });
+
+  // Update the todoLists array with the unchecked items
+  Todo.todoLists = uncheckedItems;
+
+  // Update the display and local storage
+  localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (removeCheckedItems);
+
+/***/ }),
+
 /***/ "./src/modules/display.js":
 /*!********************************!*\
   !*** ./src/modules/display.js ***!
@@ -10,33 +41,153 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   InputField: () => (/* binding */ InputField),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-var listContainer = document.querySelector('.todolist');
-var tasks = [{
-  index: 0,
-  description: 'one',
-  completed: false
-}, {
-  index: 1,
-  description: 'jump outta space',
-  completed: false
-}, {
-  index: 2,
-  description: 'watch fast x',
-  completed: false
-}, {
-  index: 3,
-  description: 'get some sleep',
-  completed: false
-}];
-var displayTask = function displayTask(tasks) {
-  var displaytTaskDem = tasks.map(function (item) {
-    return "\n  <div class=\"list\" draggable=\"true\">\n    <div class=\"content\">\n        <input class=\"box\" type=\"checkbox\" name=\"\" id=\"\">\n        <input type=\"text\" name=\"\" id=\"\" value=\"".concat(item.description, "\">\n    </div>\n    <i class=\"fa-solid fa-ellipsis-vertical icon\"></i>\n</div>");
-  }).join('');
-  listContainer.innerHTML = displaytTaskDem;
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (displayTask(tasks));
+/* harmony import */ var _taskStatus_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./taskStatus.js */ "./src/modules/taskStatus.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
+var InputField = document.querySelector('.addtodo');
+var Todo = /*#__PURE__*/_createClass(function Todo(_index, _completed, _description) {
+  var _this = this;
+  _classCallCheck(this, Todo);
+  _defineProperty(this, "addItem", function () {
+    var index = Todo.todoLists.length + 1;
+    var completed = Todo.completed;
+    var description = Todo.inputField.value;
+    var listItems = new Todo(index, completed, description);
+    if (localStorage.getItem('todoLists')) {
+      Todo.todoLists = JSON.parse(localStorage.getItem('todoLists'));
+    }
+    Todo.todoLists.push(listItems);
+    localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
+  });
+  _defineProperty(this, "clearField", function () {
+    Todo.inputField.value = '';
+  });
+  _defineProperty(this, "displayList", function (todo) {
+    var listContainer = document.querySelector('.todolist');
+    var displayTodos = todo.map(function (list) {
+      var index = list.index,
+        completed = list.completed,
+        description = list.description;
+      return "<div class=\"list\" data-id=\"".concat(index, "\">\n      <div class=\"content\">\n          <input class=\"box check-btn\" type=\"checkbox\" name=\"\" data-check=\"").concat(completed, "\">\n          <input class=\"edit-btn\" type=\"text\" name=\"\" id=\"\" value=\"").concat(description, "\" readonly>\n      </div>\n      <i class=\"fa-solid fa-trash icon delete-btn\"></i>\n   </div>\n   ");
+    }).join('');
+    listContainer.innerHTML = displayTodos;
+
+    // select elements
+    var elements = document.querySelectorAll('.list');
+    elements.forEach(function (element) {
+      var deleteBtn = element.querySelector('.delete-btn');
+      deleteBtn.addEventListener('click', _this.deleteItem);
+      var editBtn = element.querySelector('.edit-btn');
+      editBtn.addEventListener('click', _this.editItem);
+      var checkBtn = element.querySelector('.check-btn');
+      checkBtn.addEventListener('change', function (e) {
+        (0,_taskStatus_js__WEBPACK_IMPORTED_MODULE_0__["default"])(e, Todo);
+      });
+    });
+  });
+  _defineProperty(this, "deleteItem", function (e) {
+    var element = e.target.closest('.list');
+    var index = Array.from(Todo.listContainer.children).indexOf(element);
+    Todo.todoLists.splice(index, 1);
+
+    // Update the index property of the remaining list objects
+    Todo.todoLists.forEach(function (list, i) {
+      list.index = i;
+    });
+    _this.displayList(Todo.todoLists);
+
+    // Update local storage
+    localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
+  });
+  _defineProperty(this, "editItem", function (e) {
+    var element = e.target.closest('.list');
+    var index = Array.from(Todo.listContainer.children).indexOf(element);
+    var input = element.querySelector('input[type="text"]');
+    input.removeAttribute('readonly');
+    input.addEventListener('keypress', function (event) {
+      if (event.key === 'Enter') {
+        input.setAttribute('readonly', true);
+        Todo.todoLists[index].description = input.value;
+        localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
+        _this.displayList(Todo.todoLists);
+      }
+    });
+  });
+  _defineProperty(this, "displayItem", function () {
+    _this.addItem();
+    var updatedList = localStorage.getItem('todoLists');
+    var fullList = JSON.parse(updatedList);
+    _this.displayList(fullList);
+    _this.clearField();
+  });
+  _defineProperty(this, "showItem", function () {
+    var InputField = document.querySelector('.addtodo');
+    InputField.addEventListener('keypress', function (event) {
+      if (event.key === 'Enter') {
+        _this.displayItem();
+        Todo.i += 1;
+      }
+    });
+  });
+  this.index = _index;
+  this.completed = _completed;
+  this.description = _description;
+});
+_defineProperty(Todo, "todoLists", JSON.parse(localStorage.getItem('todoLists')) || []);
+_defineProperty(Todo, "inputField", void 0);
+_defineProperty(Todo, "index", void 0);
+_defineProperty(Todo, "completed", void 0);
+_defineProperty(Todo, "listContainer", void 0);
+_defineProperty(Todo, "i", 0);
+_defineProperty(Todo, "initialize", function () {
+  Todo.inputField = document.querySelector('.addtodo');
+  Todo.listContainer = document.querySelector('.todolist');
+  var inv = new Todo();
+  inv.showItem();
+  window.addEventListener('DOMContentLoaded', function () {
+    if (localStorage.getItem('todoLists')) {
+      var fullList = JSON.parse(localStorage.getItem('todoLists')) || [];
+      inv.displayList(fullList);
+    }
+  });
+});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Todo);
+
+/***/ }),
+
+/***/ "./src/modules/taskStatus.js":
+/*!***********************************!*\
+  !*** ./src/modules/taskStatus.js ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function checkItem(e, Todo) {
+  var element = e.target.closest('.list');
+  var index = Array.from(Todo.listContainer.children).indexOf(element);
+  Todo.todoLists[index].completed = e.target.checked;
+  var editBtn = element.querySelector('.edit-btn');
+  if (Todo.todoLists[index].completed === false) {
+    editBtn.classList.remove('checkActive');
+    localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
+  } else {
+    editBtn.classList.add('checkActive');
+    localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
+  }
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (checkItem);
 
 /***/ }),
 
@@ -137,12 +288,21 @@ input[type=checkbox] {
   width: 15px;
 }
 
-.content input[type=text] {
+.content [type=text] {
   min-width: 279px;
+}
+
+.checkActive {
+  text-decoration: line-through red;
 }
 
 .list .icon {
   color: gray;
+}
+
+.icon:hover {
+  color: #333;
+  cursor: pointer;
 }
 
 .clear {
@@ -154,7 +314,7 @@ input[type=checkbox] {
 .clear:hover {
   color: black;
   cursor: pointer;
-}`, "",{"version":3,"sources":["webpack://./src/styles/main.scss"],"names":[],"mappings":"AAEA;;;EAGE,SAAA;EACA,UAAA;EACA,sBAAA;EACA,uBAAA;AAAF;;AAGA;EACE,kCAAA;AAAF;;AAGA;EACE,0BAAA;AAAF;;AAGA;EACE,aAAA;EACA,mBAAA;EACA,aAAA;AAAF;;AAGA;EACE,YAAA;EACA,iBAAA;EACA,iDAAA;EACA,aAAA;EACA,aAAA;EACA,sBAAA;EACA,SAAA;AAAF;;AAGA;EACE,aAAA;EACA,8BAAA;AAAF;;AAGA;EACE,kBAAA;AAAF;;AAGA;EACE,aAAA;EACA,8BAAA;EACA,WAAA;EACA,0BAAA;EACA,6BAAA;AAAF;;AAGA;EACE,aAAA;EACA,eAAA;EACA,UAAA;EACA,SAAA;EACA,gBAAA;AAAF;;AAGA;EACE,WAAA;AAAF;;AAGA;EACE,aAAA;EACA,8BAAA;EACA,6BAAA;AAAF;;AAGA;EACE,aAAA;EACA,8BAAA;AAAF;;AAGA;EACE,WAAA;AAAF;;AAGA;EACE,gBAAA;AAAF;;AAGA;EACE,WAAA;AAAF;;AAGA;EACE,aAAA;EACA,mBAAA;EACA,UAAA;AAAF;;AAGA;EACE,YAAA;EACA,eAAA;AAAF","sourcesContent":["@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;0,500;1,400&display=swap');\r\n\r\n*,\r\n::after,\r\n::before {\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n  scroll-behavior: smooth;\r\n}\r\n\r\nbody {\r\n  font-family: 'Poppins', sans-serif;\r\n}\r\n\r\nh1 {\r\n  text-transform: capitalize;\r\n}\r\n\r\nmain {\r\n  display: grid;\r\n  place-items: center;\r\n  padding: 2rem;\r\n}\r\n\r\n.container {\r\n  width: 21rem;\r\n  max-height: 100vh;\r\n  box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;\r\n  padding: 15px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 20px;\r\n}\r\n\r\n.title {\r\n  display: flex;\r\n  justify-content: space-between;\r\n}\r\n\r\n.icon {\r\n  margin-top: 0.7rem;\r\n}\r\n\r\n.add {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  color: gray;\r\n  border-top: 1px solid gray;\r\n  border-bottom: 1px solid gray;\r\n}\r\n\r\ninput[type=\"text\"] {\r\n  padding: 10px;\r\n  font-size: 18px;\r\n  outline: 0;\r\n  border: 0;\r\n  min-width: 291px;\r\n}\r\n\r\n::placeholder {\r\n  color: gray;\r\n}\r\n\r\n.list {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  border-bottom: 1px solid gray;\r\n}\r\n\r\n.content {\r\n  display: flex;\r\n  justify-content: space-between;\r\n}\r\n\r\ninput[type=\"checkbox\"] {\r\n  width: 15px;\r\n}\r\n\r\n.content input[type=\"text\"] {\r\n  min-width: 279px;\r\n}\r\n\r\n.list .icon {\r\n  color: gray;\r\n}\r\n\r\n.clear {\r\n  display: grid;\r\n  place-items: center;\r\n  color: red;\r\n}\r\n\r\n.clear:hover {\r\n  color: black;\r\n  cursor: pointer;\r\n}\r\n"],"sourceRoot":""}]);
+}`, "",{"version":3,"sources":["webpack://./src/styles/main.scss"],"names":[],"mappings":"AAEA;;;EAGE,SAAA;EACA,UAAA;EACA,sBAAA;EACA,uBAAA;AAAF;;AAGA;EACE,kCAAA;AAAF;;AAGA;EACE,0BAAA;AAAF;;AAGA;EACE,aAAA;EACA,mBAAA;EACA,aAAA;AAAF;;AAGA;EACE,YAAA;EACA,iBAAA;EACA,iDAAA;EACA,aAAA;EACA,aAAA;EACA,sBAAA;EACA,SAAA;AAAF;;AAGA;EACE,aAAA;EACA,8BAAA;AAAF;;AAGA;EACE,kBAAA;AAAF;;AAGA;EACE,aAAA;EACA,8BAAA;EACA,WAAA;EACA,0BAAA;EACA,6BAAA;AAAF;;AAGA;EACE,aAAA;EACA,eAAA;EACA,UAAA;EACA,SAAA;EACA,gBAAA;AAAF;;AAGA;EACE,WAAA;AAAF;;AAGA;EACE,aAAA;EACA,8BAAA;EACA,6BAAA;AAAF;;AAGA;EACE,aAAA;EACA,8BAAA;AAAF;;AAGA;EACE,WAAA;AAAF;;AAGA;EACE,gBAAA;AAAF;;AAGA;EACE,iCAAA;AAAF;;AAGA;EACE,WAAA;AAAF;;AAGA;EACE,WAAA;EACA,eAAA;AAAF;;AAGA;EACE,aAAA;EACA,mBAAA;EACA,UAAA;AAAF;;AAGA;EACE,YAAA;EACA,eAAA;AAAF","sourcesContent":["@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;0,500;1,400&display=swap');\r\n\r\n*,\r\n::after,\r\n::before {\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n  scroll-behavior: smooth;\r\n}\r\n\r\nbody {\r\n  font-family: 'Poppins', sans-serif;\r\n}\r\n\r\nh1 {\r\n  text-transform: capitalize;\r\n}\r\n\r\nmain {\r\n  display: grid;\r\n  place-items: center;\r\n  padding: 2rem;\r\n}\r\n\r\n.container {\r\n  width: 21rem;\r\n  max-height: 100vh;\r\n  box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;\r\n  padding: 15px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 20px;\r\n}\r\n\r\n.title {\r\n  display: flex;\r\n  justify-content: space-between;\r\n}\r\n\r\n.icon {\r\n  margin-top: 0.7rem;\r\n}\r\n\r\n.add {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  color: gray;\r\n  border-top: 1px solid gray;\r\n  border-bottom: 1px solid gray;\r\n}\r\n\r\ninput[type=\"text\"] {\r\n  padding: 10px;\r\n  font-size: 18px;\r\n  outline: 0;\r\n  border: 0;\r\n  min-width: 291px;\r\n}\r\n\r\n::placeholder {\r\n  color: gray;\r\n}\r\n\r\n.list {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  border-bottom: 1px solid gray;\r\n}\r\n\r\n.content {\r\n  display: flex;\r\n  justify-content: space-between;\r\n}\r\n\r\ninput[type=\"checkbox\"] {\r\n  width: 15px;\r\n}\r\n\r\n.content [type='text'] {\r\n  min-width: 279px;\r\n}\r\n\r\n.checkActive {\r\n  text-decoration: line-through red;\r\n}\r\n\r\n.list .icon {\r\n  color: gray;\r\n}\r\n\r\n.icon:hover {\r\n  color: #333;\r\n  cursor: pointer;\r\n}\r\n\r\n.clear {\r\n  display: grid;\r\n  place-items: center;\r\n  color: red;\r\n}\r\n\r\n.clear:hover {\r\n  color: black;\r\n  cursor: pointer;\r\n}\r\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -683,11 +843,27 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _styles_main_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./styles/main.scss */ "./src/styles/main.scss");
 /* harmony import */ var _modules_display_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/display.js */ "./src/modules/display.js");
+/* harmony import */ var _modules_clearCompleted_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/clearCompleted.js */ "./src/modules/clearCompleted.js");
 
 
-window.addEventListener('DOMContentLoaded', _modules_display_js__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
+var deleteCompleted = document.querySelector('.clear');
+var refreshList = document.querySelector('#reload');
+_modules_display_js__WEBPACK_IMPORTED_MODULE_1__["default"].initialize();
+window.addEventListener('DomContentLoaded', function () {
+  _modules_display_js__WEBPACK_IMPORTED_MODULE_1__["default"].editItem();
+});
+refreshList.addEventListener('click', function () {
+  _modules_display_js__WEBPACK_IMPORTED_MODULE_1__["default"].todoLists = [];
+  localStorage.removeItem('todoLists');
+  window.location.reload();
+});
+deleteCompleted.addEventListener('click', function () {
+  (0,_modules_clearCompleted_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_modules_display_js__WEBPACK_IMPORTED_MODULE_1__["default"]);
+  window.location.reload();
+});
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=bundlea66c012baff4b98b0b9b.js.map
+//# sourceMappingURL=bundlee53b67d89c6d6996814a.js.map
