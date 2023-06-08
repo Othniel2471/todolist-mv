@@ -42,6 +42,7 @@
 ### Key Features <a name="key-features"></a>
 -Add tasks to list.
 -Check completed task.
+-Edit tasks.
 -Delete task.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
