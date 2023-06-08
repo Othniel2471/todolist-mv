@@ -85,6 +85,11 @@ input[type="checkbox"] {
   color: gray;
 }
 
+.icon:hover {
+  color: #333;
+  cursor: pointer;
+}
+
 .clear {
   display: grid;
   place-items: center;
