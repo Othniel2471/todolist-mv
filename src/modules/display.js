@@ -1,4 +1,3 @@
-
 export const InputField = document.querySelector('.addtodo');
 
 class Todo {
