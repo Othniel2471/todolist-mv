@@ -25,8 +25,7 @@ var Todo = /*#__PURE__*/_createClass(function Todo(_index, _completed, _descript
   var _this = this;
   _classCallCheck(this, Todo);
   _defineProperty(this, "addItem", function () {
-    var index = Todo.index;
-    index = Todo.i;
+    var index = Todo.todoLists.length + 1;
     var completed = Todo.completed;
     var description = Todo.inputField.value;
     var listItems = new Todo(index, completed, description);
@@ -40,13 +39,12 @@ var Todo = /*#__PURE__*/_createClass(function Todo(_index, _completed, _descript
     Todo.inputField.value = '';
   });
   _defineProperty(this, "displayList", function (todo) {
-    // const todos = JSON.parse(localStorage.getItem('todoLists'));
     var listContainer = document.querySelector('.todolist');
     var displayTodos = todo.map(function (list) {
       var index = list.index,
         completed = list.completed,
         description = list.description;
-      return "<div class=\"list\" data-id=\"".concat(index, "\">\n      <div class=\"content\">\n          <input class=\"box check-btn\" type=\"checkbox\" name=\"\" data-check=\"").concat(completed, "\">\n          <input class=\"edit-btn\" type=\"text\" name=\"\" id=\"\" value=\"").concat(description, "\">\n      </div>\n      <i class=\"fa-solid fa-ellipsis-vertical icon delete-btn\"></i>\n   </div>");
+      return "<div class=\"list\" data-id=\"".concat(index, "\">\n      <div class=\"content\">\n          <input class=\"box check-btn\" type=\"checkbox\" name=\"\" data-check=\"").concat(completed, "\">\n          <input class=\"edit-btn\" type=\"text\" name=\"\" id=\"\" value=\"").concat(description, "\" readonly>\n      </div>\n      <i class=\"fa-solid fa-trash icon delete-btn\"></i>\n   </div>");
     }).join('');
     listContainer.innerHTML = displayTodos;
 
@@ -55,6 +53,8 @@ var Todo = /*#__PURE__*/_createClass(function Todo(_index, _completed, _descript
     elements.forEach(function (element) {
       var deleteBtn = element.querySelector('.delete-btn');
       deleteBtn.addEventListener('click', _this.deleteItem);
+      var editBtn = element.querySelector('.edit-btn');
+      editBtn.addEventListener('click', _this.editItem);
     });
   });
   _defineProperty(this, "deleteItem", function (e) {
@@ -66,10 +66,24 @@ var Todo = /*#__PURE__*/_createClass(function Todo(_index, _completed, _descript
     Todo.todoLists.forEach(function (list, i) {
       list.index = i;
     });
-    _this.displayList(Todo.todoLists); // Update the displayed list after deleting
+    _this.displayList(Todo.todoLists);
 
     // Update local storage
     localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
+  });
+  _defineProperty(this, "editItem", function (e) {
+    var element = e.target.closest('.list');
+    var index = Array.from(Todo.listContainer.children).indexOf(element);
+    var input = element.querySelector('input[type="text"]');
+    input.removeAttribute('readonly');
+    input.addEventListener('keypress', function (event) {
+      if (event.key === 'Enter') {
+        input.setAttribute('readonly', true);
+        Todo.todoLists[index].description = input.value;
+        localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
+        _this.displayList(Todo.todoLists);
+      }
+    });
   });
   _defineProperty(this, "displayItem", function () {
     _this.addItem();
@@ -88,10 +102,10 @@ var Todo = /*#__PURE__*/_createClass(function Todo(_index, _completed, _descript
     });
   });
   this.index = _index;
-  this.complete = _completed;
+  this.completed = _completed;
   this.description = _description;
 });
-_defineProperty(Todo, "todoLists", []);
+_defineProperty(Todo, "todoLists", JSON.parse(localStorage.getItem('todoLists')) || []);
 _defineProperty(Todo, "inputField", void 0);
 _defineProperty(Todo, "index", void 0);
 _defineProperty(Todo, "completed", void 0);
@@ -104,7 +118,7 @@ _defineProperty(Todo, "initialize", function () {
   inv.showItem();
   window.addEventListener('DOMContentLoaded', function () {
     if (localStorage.getItem('todoLists')) {
-      var fullList = JSON.parse(localStorage.getItem('todoLists'));
+      var fullList = JSON.parse(localStorage.getItem('todoLists')) || [];
       inv.displayList(fullList);
     }
   });
@@ -218,6 +232,11 @@ input[type=checkbox] {
   color: gray;
 }
 
+.icon:hover {
+  color: #333;
+  cursor: pointer;
+}
+
 .clear {
   display: grid;
   place-items: center;
@@ -227,7 +246,7 @@ input[type=checkbox] {
 .clear:hover {
   color: black;
   cursor: pointer;
-}`, "",{"version":3,"sources":["webpack://./src/styles/main.scss"],"names":[],"mappings":"AAEA;;;EAGE,SAAA;EACA,UAAA;EACA,sBAAA;EACA,uBAAA;AAAF;;AAGA;EACE,kCAAA;AAAF;;AAGA;EACE,0BAAA;AAAF;;AAGA;EACE,aAAA;EACA,mBAAA;EACA,aAAA;AAAF;;AAGA;EACE,YAAA;EACA,iBAAA;EACA,iDAAA;EACA,aAAA;EACA,aAAA;EACA,sBAAA;EACA,SAAA;AAAF;;AAGA;EACE,aAAA;EACA,8BAAA;AAAF;;AAGA;EACE,kBAAA;AAAF;;AAGA;EACE,aAAA;EACA,8BAAA;EACA,WAAA;EACA,0BAAA;EACA,6BAAA;AAAF;;AAGA;EACE,aAAA;EACA,eAAA;EACA,UAAA;EACA,SAAA;EACA,gBAAA;AAAF;;AAGA;EACE,WAAA;AAAF;;AAGA;EACE,aAAA;EACA,8BAAA;EACA,6BAAA;AAAF;;AAGA;EACE,aAAA;EACA,8BAAA;AAAF;;AAGA;EACE,WAAA;AAAF;;AAGA;EACE,gBAAA;AAAF;;AAGA;EACE,WAAA;AAAF;;AAGA;EACE,aAAA;EACA,mBAAA;EACA,UAAA;AAAF;;AAGA;EACE,YAAA;EACA,eAAA;AAAF","sourcesContent":["@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;0,500;1,400&display=swap');\r\n\r\n*,\r\n::after,\r\n::before {\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n  scroll-behavior: smooth;\r\n}\r\n\r\nbody {\r\n  font-family: 'Poppins', sans-serif;\r\n}\r\n\r\nh1 {\r\n  text-transform: capitalize;\r\n}\r\n\r\nmain {\r\n  display: grid;\r\n  place-items: center;\r\n  padding: 2rem;\r\n}\r\n\r\n.container {\r\n  width: 21rem;\r\n  max-height: 100vh;\r\n  box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;\r\n  padding: 15px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 20px;\r\n}\r\n\r\n.title {\r\n  display: flex;\r\n  justify-content: space-between;\r\n}\r\n\r\n.icon {\r\n  margin-top: 0.7rem;\r\n}\r\n\r\n.add {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  color: gray;\r\n  border-top: 1px solid gray;\r\n  border-bottom: 1px solid gray;\r\n}\r\n\r\ninput[type=\"text\"] {\r\n  padding: 10px;\r\n  font-size: 18px;\r\n  outline: 0;\r\n  border: 0;\r\n  min-width: 291px;\r\n}\r\n\r\n::placeholder {\r\n  color: gray;\r\n}\r\n\r\n.list {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  border-bottom: 1px solid gray;\r\n}\r\n\r\n.content {\r\n  display: flex;\r\n  justify-content: space-between;\r\n}\r\n\r\ninput[type=\"checkbox\"] {\r\n  width: 15px;\r\n}\r\n\r\n.content input[type=\"text\"] {\r\n  min-width: 279px;\r\n}\r\n\r\n.list .icon {\r\n  color: gray;\r\n}\r\n\r\n.clear {\r\n  display: grid;\r\n  place-items: center;\r\n  color: red;\r\n}\r\n\r\n.clear:hover {\r\n  color: black;\r\n  cursor: pointer;\r\n}"],"sourceRoot":""}]);
+}`, "",{"version":3,"sources":["webpack://./src/styles/main.scss"],"names":[],"mappings":"AAEA;;;EAGE,SAAA;EACA,UAAA;EACA,sBAAA;EACA,uBAAA;AAAF;;AAGA;EACE,kCAAA;AAAF;;AAGA;EACE,0BAAA;AAAF;;AAGA;EACE,aAAA;EACA,mBAAA;EACA,aAAA;AAAF;;AAGA;EACE,YAAA;EACA,iBAAA;EACA,iDAAA;EACA,aAAA;EACA,aAAA;EACA,sBAAA;EACA,SAAA;AAAF;;AAGA;EACE,aAAA;EACA,8BAAA;AAAF;;AAGA;EACE,kBAAA;AAAF;;AAGA;EACE,aAAA;EACA,8BAAA;EACA,WAAA;EACA,0BAAA;EACA,6BAAA;AAAF;;AAGA;EACE,aAAA;EACA,eAAA;EACA,UAAA;EACA,SAAA;EACA,gBAAA;AAAF;;AAGA;EACE,WAAA;AAAF;;AAGA;EACE,aAAA;EACA,8BAAA;EACA,6BAAA;AAAF;;AAGA;EACE,aAAA;EACA,8BAAA;AAAF;;AAGA;EACE,WAAA;AAAF;;AAGA;EACE,gBAAA;AAAF;;AAGA;EACE,WAAA;AAAF;;AAGA;EACE,WAAA;EACA,eAAA;AAAF;;AAGA;EACE,aAAA;EACA,mBAAA;EACA,UAAA;AAAF;;AAGA;EACE,YAAA;EACA,eAAA;AAAF","sourcesContent":["@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;0,500;1,400&display=swap');\r\n\r\n*,\r\n::after,\r\n::before {\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n  scroll-behavior: smooth;\r\n}\r\n\r\nbody {\r\n  font-family: 'Poppins', sans-serif;\r\n}\r\n\r\nh1 {\r\n  text-transform: capitalize;\r\n}\r\n\r\nmain {\r\n  display: grid;\r\n  place-items: center;\r\n  padding: 2rem;\r\n}\r\n\r\n.container {\r\n  width: 21rem;\r\n  max-height: 100vh;\r\n  box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;\r\n  padding: 15px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 20px;\r\n}\r\n\r\n.title {\r\n  display: flex;\r\n  justify-content: space-between;\r\n}\r\n\r\n.icon {\r\n  margin-top: 0.7rem;\r\n}\r\n\r\n.add {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  color: gray;\r\n  border-top: 1px solid gray;\r\n  border-bottom: 1px solid gray;\r\n}\r\n\r\ninput[type=\"text\"] {\r\n  padding: 10px;\r\n  font-size: 18px;\r\n  outline: 0;\r\n  border: 0;\r\n  min-width: 291px;\r\n}\r\n\r\n::placeholder {\r\n  color: gray;\r\n}\r\n\r\n.list {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  border-bottom: 1px solid gray;\r\n}\r\n\r\n.content {\r\n  display: flex;\r\n  justify-content: space-between;\r\n}\r\n\r\ninput[type=\"checkbox\"] {\r\n  width: 15px;\r\n}\r\n\r\n.content input[type=\"text\"] {\r\n  min-width: 279px;\r\n}\r\n\r\n.list .icon {\r\n  color: gray;\r\n}\r\n\r\n.icon:hover {\r\n  color: #333;\r\n  cursor: pointer;\r\n}\r\n\r\n.clear {\r\n  display: grid;\r\n  place-items: center;\r\n  color: red;\r\n}\r\n\r\n.clear:hover {\r\n  color: black;\r\n  cursor: pointer;\r\n}\r\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -757,10 +776,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _styles_main_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./styles/main.scss */ "./src/styles/main.scss");
 /* harmony import */ var _modules_display_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/display.js */ "./src/modules/display.js");
 
+// import Todo, {  } from './modules/display.js';
 
 _modules_display_js__WEBPACK_IMPORTED_MODULE_1__["default"].initialize();
+window.addEventListener('DomContentLoaded', function () {
+  _modules_display_js__WEBPACK_IMPORTED_MODULE_1__["default"].editItem();
+});
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=bundleec6264aebbc61d19edc2.js.map
+//# sourceMappingURL=bundlea7412dc5ea8efbfd3936.js.map

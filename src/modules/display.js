@@ -1,7 +1,7 @@
 export const InputField = document.querySelector('.addtodo');
 
 class Todo {
-  static todoLists = [];
+  static todoLists = JSON.parse(localStorage.getItem('todoLists')) || [];
 
   static inputField;
 
@@ -15,7 +15,7 @@ class Todo {
 
   constructor(index, completed, description) {
     this.index = index;
-    this.complete = completed;
+    this.completed = completed;
     this.description = description;
   }
 
@@ -28,15 +28,14 @@ class Todo {
 
     window.addEventListener('DOMContentLoaded', () => {
       if (localStorage.getItem('todoLists')) {
-        const fullList = JSON.parse(localStorage.getItem('todoLists'));
+        const fullList = JSON.parse(localStorage.getItem('todoLists')) || [];
         inv.displayList(fullList);
       }
     });
   }
 
    addItem = () => {
-     let { index } = Todo;
-     index = Todo.i;
+     const index = Todo.todoLists.length + 1;
      const { completed } = Todo;
      const description = Todo.inputField.value;
      const listItems = new Todo(index, completed, description);
@@ -53,16 +52,15 @@ class Todo {
   };
 
   displayList = (todo) => {
-    // const todos = JSON.parse(localStorage.getItem('todoLists'));
     const listContainer = document.querySelector('.todolist');
     const displayTodos = todo.map((list) => {
       const { index, completed, description } = list;
       return `<div class="list" data-id="${index}">
       <div class="content">
           <input class="box check-btn" type="checkbox" name="" data-check="${completed}">
-          <input class="edit-btn" type="text" name="" id="" value="${description}">
+          <input class="edit-btn" type="text" name="" id="" value="${description}" readonly>
       </div>
-      <i class="fa-solid fa-ellipsis-vertical icon delete-btn"></i>
+      <i class="fa-solid fa-trash icon delete-btn"></i>
    </div>`;
     }).join('');
 
@@ -73,6 +71,8 @@ class Todo {
     elements.forEach((element) => {
       const deleteBtn = element.querySelector('.delete-btn');
       deleteBtn.addEventListener('click', this.deleteItem);
+      const editBtn = element.querySelector('.edit-btn');
+      editBtn.addEventListener('click', this.editItem);
     });
   }
 
@@ -86,10 +86,25 @@ class Todo {
       list.index = i;
     });
 
-    this.displayList(Todo.todoLists); // Update the displayed list after deleting
+    this.displayList(Todo.todoLists);
 
     // Update local storage
     localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
+  };
+
+  editItem = (e) => {
+    const element = e.target.closest('.list');
+    const index = Array.from(Todo.listContainer.children).indexOf(element);
+    const input = element.querySelector('input[type="text"]');
+    input.removeAttribute('readonly');
+    input.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        input.setAttribute('readonly', true);
+        Todo.todoLists[index].description = input.value;
+        localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
+        this.displayList(Todo.todoLists);
+      }
+    });
   };
 
   displayItem = () => {
