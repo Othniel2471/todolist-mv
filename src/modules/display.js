@@ -13,7 +13,7 @@ class Todo {
 
   static listContainer;
 
-  static i = 0;
+  static i = 1;
 
   constructor(index, completed, description) {
     this.index = index;
