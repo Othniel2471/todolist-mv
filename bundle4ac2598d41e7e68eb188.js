@@ -60,6 +60,7 @@ var Todo = /*#__PURE__*/_createClass(function Todo(_index, _completed, _descript
   _defineProperty(this, "addItem", function () {
     var index = Todo.todoLists.length + 1;
     var completed = Todo.completed;
+    completed = false;
     var description = Todo.inputField.value;
     var listItems = new Todo(index, completed, description);
     if (localStorage.getItem('todoLists')) {
@@ -77,7 +78,9 @@ var Todo = /*#__PURE__*/_createClass(function Todo(_index, _completed, _descript
       var index = list.index,
         completed = list.completed,
         description = list.description;
-      return "<div class=\"list\" data-id=\"".concat(index, "\">\n      <div class=\"content\">\n          <input class=\"box check-btn\" type=\"checkbox\" name=\"\" data-check=\"").concat(completed, "\">\n          <input class=\"edit-btn\" type=\"text\" name=\"\" id=\"\" value=\"").concat(description, "\" readonly>\n      </div>\n      <i class=\"fa-solid fa-trash icon delete-btn\"></i>\n   </div>\n   ");
+      var checkedAttribute = completed ? 'checked' : '';
+      var checkActiveClass = completed ? 'checkActive' : '';
+      return "<div class=\"list\" data-id=\"".concat(index, "\">\n        <div class=\"content\">\n            <input class=\"box check-btn\" type=\"checkbox\" name=\"\" data-check=\"").concat(completed, "\" ").concat(checkedAttribute, ">\n            <input class=\"edit-btn ").concat(checkActiveClass, "\" type=\"text\" name=\"\" id=\"\" value=\"").concat(description, "\" readonly>\n        </div>\n        <i class=\"fa-solid fa-trash icon delete-btn\"></i>\n      </div>\n     ");
     }).join('');
     listContainer.innerHTML = displayTodos;
 
@@ -151,13 +154,17 @@ _defineProperty(Todo, "i", 0);
 _defineProperty(Todo, "initialize", function () {
   Todo.inputField = document.querySelector('.addtodo');
   Todo.listContainer = document.querySelector('.todolist');
+
+  // Retrieve the saved state from localStorage
+  var savedTodoLists = localStorage.getItem('todoLists');
+  if (savedTodoLists) {
+    // Parse the saved state back into a Todo array
+    Todo.todoLists = JSON.parse(savedTodoLists);
+  }
   var inv = new Todo();
   inv.showItem();
   window.addEventListener('DOMContentLoaded', function () {
-    if (localStorage.getItem('todoLists')) {
-      var fullList = JSON.parse(localStorage.getItem('todoLists')) || [];
-      inv.displayList(fullList);
-    }
+    inv.displayList(Todo.todoLists);
   });
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Todo);
@@ -181,11 +188,10 @@ function checkItem(e, Todo) {
   var editBtn = element.querySelector('.edit-btn');
   if (Todo.todoLists[index].completed === false) {
     editBtn.classList.remove('checkActive');
-    localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
   } else {
     editBtn.classList.add('checkActive');
-    localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
   }
+  localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (checkItem);
 
@@ -866,4 +872,4 @@ deleteCompleted.addEventListener('click', function () {
 
 /******/ })()
 ;
-//# sourceMappingURL=bundlee53b67d89c6d6996814a.js.map
+//# sourceMappingURL=bundle4ac2598d41e7e68eb188.js.map
