@@ -144,7 +144,7 @@ _defineProperty(Todo, "inputField", void 0);
 _defineProperty(Todo, "index", void 0);
 _defineProperty(Todo, "completed", void 0);
 _defineProperty(Todo, "listContainer", void 0);
-_defineProperty(Todo, "i", 0);
+_defineProperty(Todo, "i", 1);
 _defineProperty(Todo, "initialize", function () {
   Todo.inputField = document.querySelector('.addtodo');
   Todo.listContainer = document.querySelector('.todolist');
@@ -866,4 +866,4 @@ deleteCompleted.addEventListener('click', function () {
 
 /******/ })()
 ;
-//# sourceMappingURL=bundle73cf252ab6706dfabdbd.js.map
+//# sourceMappingURL=bundledb22180c3404d4c2bcc3.js.map
