@@ -51,7 +51,9 @@ class Todo {
      if (localStorage.getItem('todoLists')) {
        Todo.todoLists = JSON.parse(localStorage.getItem('todoLists'));
      }
-     Todo.todoLists.push(listItems);
+     if (Todo.inputField.value !== '') {
+       Todo.todoLists.push(listItems);
+     }
      localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
    };
 
