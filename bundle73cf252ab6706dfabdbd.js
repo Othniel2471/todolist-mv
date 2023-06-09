@@ -17,16 +17,10 @@ function removeCheckedItems(Todo) {
   var uncheckedItems = Todo.todoLists.filter(function (item) {
     return !item.completed;
   });
-
-  // Update the index property of the remaining list objects
   uncheckedItems.forEach(function (item, index) {
     item.index = index;
   });
-
-  // Update the todoLists array with the unchecked items
   Todo.todoLists = uncheckedItems;
-
-  // Update the display and local storage
   localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (removeCheckedItems);
@@ -872,4 +866,4 @@ deleteCompleted.addEventListener('click', function () {
 
 /******/ })()
 ;
-//# sourceMappingURL=bundle4ac2598d41e7e68eb188.js.map
+//# sourceMappingURL=bundle73cf252ab6706dfabdbd.js.map
