@@ -49,7 +49,7 @@
 
 ## Live Demo  <a name="live-demo"></a>
 
--click here [live](https://othniel2471.github.io/todolist-mv/dist) demo.
+-click here [live](https://othniel2471.github.io/todolist-mv/) demo.
 
 <!-- GETTING STARTED -->
 
