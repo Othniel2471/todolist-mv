@@ -18,7 +18,7 @@ function removeCheckedItems(Todo) {
     return !item.completed;
   });
   uncheckedItems.forEach(function (item, index) {
-    item.index = index;
+    item.index = index + 1;
   });
   Todo.todoLists = uncheckedItems;
   localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
@@ -52,7 +52,7 @@ var Todo = /*#__PURE__*/_createClass(function Todo(_index, _completed, _descript
   var _this = this;
   _classCallCheck(this, Todo);
   _defineProperty(this, "addItem", function () {
-    var index = Todo.todoLists.length + 1;
+    var index = Todo.i;
     var completed = Todo.completed;
     completed = false;
     var description = Todo.inputField.value;
@@ -98,7 +98,7 @@ var Todo = /*#__PURE__*/_createClass(function Todo(_index, _completed, _descript
 
     // Update the index property of the remaining list objects
     Todo.todoLists.forEach(function (list, i) {
-      list.index = i;
+      list.index = i + 1;
     });
     _this.displayList(Todo.todoLists);
 
@@ -866,4 +866,4 @@ deleteCompleted.addEventListener('click', function () {
 
 /******/ })()
 ;
-//# sourceMappingURL=bundledb22180c3404d4c2bcc3.js.map
+//# sourceMappingURL=bundle1fb67592ed3ab5080c68.js.map
