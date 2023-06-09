@@ -1,3 +1,5 @@
+import checkItem from './taskStatus.js';
+
 export const InputField = document.querySelector('.addtodo');
 
 class Todo {
@@ -11,7 +13,7 @@ class Todo {
 
   static listContainer;
 
-  static i = 0;
+  static i = 1;
 
   constructor(index, completed, description) {
     this.index = index;
@@ -23,20 +25,26 @@ class Todo {
     Todo.inputField = document.querySelector('.addtodo');
     Todo.listContainer = document.querySelector('.todolist');
 
+    // Retrieve the saved state from localStorage
+    const savedTodoLists = localStorage.getItem('todoLists');
+
+    if (savedTodoLists) {
+      // Parse the saved state back into a Todo array
+      Todo.todoLists = JSON.parse(savedTodoLists);
+    }
+
     const inv = new Todo();
     inv.showItem();
 
     window.addEventListener('DOMContentLoaded', () => {
-      if (localStorage.getItem('todoLists')) {
-        const fullList = JSON.parse(localStorage.getItem('todoLists')) || [];
-        inv.displayList(fullList);
-      }
+      inv.displayList(Todo.todoLists);
     });
-  }
+  };
 
    addItem = () => {
-     const index = Todo.todoLists.length + 1;
-     const { completed } = Todo;
+     const index = Todo.i;
+     let { completed } = Todo;
+     completed = false;
      const description = Todo.inputField.value;
      const listItems = new Todo(index, completed, description);
 
@@ -55,13 +63,16 @@ class Todo {
     const listContainer = document.querySelector('.todolist');
     const displayTodos = todo.map((list) => {
       const { index, completed, description } = list;
+      const checkedAttribute = completed ? 'checked' : '';
+      const checkActiveClass = completed ? 'checkActive' : '';
       return `<div class="list" data-id="${index}">
-      <div class="content">
-          <input class="box check-btn" type="checkbox" name="" data-check="${completed}">
-          <input class="edit-btn" type="text" name="" id="" value="${description}" readonly>
+        <div class="content">
+            <input class="box check-btn" type="checkbox" name="" data-check="${completed}" ${checkedAttribute}>
+            <input class="edit-btn ${checkActiveClass}" type="text" name="" id="" value="${description}" readonly>
+        </div>
+        <i class="fa-solid fa-trash icon delete-btn"></i>
       </div>
-      <i class="fa-solid fa-trash icon delete-btn"></i>
-   </div>`;
+     `;
     }).join('');
 
     listContainer.innerHTML = displayTodos;
@@ -73,6 +84,10 @@ class Todo {
       deleteBtn.addEventListener('click', this.deleteItem);
       const editBtn = element.querySelector('.edit-btn');
       editBtn.addEventListener('click', this.editItem);
+      const checkBtn = element.querySelector('.check-btn');
+      checkBtn.addEventListener('change', (e) => {
+        checkItem(e, Todo);
+      });
     });
   }
 
@@ -83,7 +98,7 @@ class Todo {
 
     // Update the index property of the remaining list objects
     Todo.todoLists.forEach((list, i) => {
-      list.index = i;
+      list.index = i + 1;
     });
 
     this.displayList(Todo.todoLists);
