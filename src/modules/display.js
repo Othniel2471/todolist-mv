@@ -42,7 +42,7 @@ class Todo {
   };
 
    addItem = () => {
-     const index = Todo.todoLists.length + 1;
+     const index = Todo.i;
      let { completed } = Todo;
      completed = false;
      const description = Todo.inputField.value;
@@ -98,7 +98,7 @@ class Todo {
 
     // Update the index property of the remaining list objects
     Todo.todoLists.forEach((list, i) => {
-      list.index = i;
+      list.index = i + 1;
     });
 
     this.displayList(Todo.todoLists);

@@ -3,7 +3,7 @@ function removeCheckedItems(Todo) {
   const uncheckedItems = Todo.todoLists.filter((item) => !item.completed);
 
   uncheckedItems.forEach((item, index) => {
-    item.index = index;
+    item.index = index + 1;
   });
 
   Todo.todoLists = uncheckedItems;
