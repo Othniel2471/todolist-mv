@@ -60,7 +60,9 @@ var Todo = /*#__PURE__*/_createClass(function Todo(_index, _completed, _descript
     if (localStorage.getItem('todoLists')) {
       Todo.todoLists = JSON.parse(localStorage.getItem('todoLists'));
     }
-    Todo.todoLists.push(listItems);
+    if (Todo.inputField.value !== '') {
+      Todo.todoLists.push(listItems);
+    }
     localStorage.setItem('todoLists', JSON.stringify(Todo.todoLists));
   });
   _defineProperty(this, "clearField", function () {
@@ -866,4 +868,4 @@ deleteCompleted.addEventListener('click', function () {
 
 /******/ })()
 ;
-//# sourceMappingURL=bundle1fb67592ed3ab5080c68.js.map
+//# sourceMappingURL=bundle9c5f48fa5f592d6b1188.js.map
